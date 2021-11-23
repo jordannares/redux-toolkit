@@ -1,23 +1,33 @@
-import logo from './logo.svg';
+import { useEffect } from 'react';
 import './App.css';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchPost } from './redux/slices/counterSlices';
+
 
 function App() {
+  const dispatch = useDispatch();
+
+  useEffect(()=>{
+    dispatch(fetchPost());
+  },[]);
+
+  const post = useSelector(state => state.post);
+
+  const { postsList, loading } = post;
+  console.log({ postsList,loading });
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+
+      <h1>Post Lists</h1>
+
+      {loading ? <h2>Loading...</h2> : postsList?.map( post => (
+        <>
+          <h2>{post.title}</h2>
+          <p>{post.body}</p>
+          <hr/>
+        </>
+      ))}
     </div>
   );
 }
